@@ -30,7 +30,7 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Crypto Market Data test</h1>
+      <h1>Crypto Market Data</h1>
       <div className="controls">
         <label>
           Currency:
