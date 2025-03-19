@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import Login from "./components/Login";
 import Register from "./components/Register";
 
@@ -54,45 +55,68 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Crypto Market Data</h1>
+      <h1 className="text-center mb-4">Crypto Market Data</h1>
       {token ? (
         <>
-          <div className="controls">
-            <label>
-              Currency:
-              <input
-                type="text"
-                value={vsCurrency}
-                onChange={(e) => setVsCurrency(e.target.value)}
-              />
-            </label>
-            <label>
-              Per Page:
-              <input
-                type="number"
-                value={perPage}
-                onChange={(e) => setPerPage(e.target.value)}
-              />
-            </label>
-            <label>
-              Page:
-              <input
-                type="number"
-                value={page}
-                onChange={(e) => setPage(e.target.value)}
-              />
-            </label>
-            <button onClick={fetchData}>Fetch Data</button>
-            <button onClick={handleLogout}>Logout</button>
+          <div className="row justify-content-center">
+            <div className="col-md-6 col-lg-4">
+              <div className="controls mb-4">
+                <div className="mb-3">
+                  <label className="form-label">
+                    Currency:
+                    <input
+                      type="text"
+                      value={vsCurrency}
+                      onChange={(e) => setVsCurrency(e.target.value)}
+                      className="form-control"
+                    />
+                  </label>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">
+                    Per Page:
+                    <input
+                      type="number"
+                      value={perPage}
+                      onChange={(e) => setPerPage(e.target.value)}
+                      className="form-control"
+                    />
+                  </label>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">
+                    Page:
+                    <input
+                      type="number"
+                      value={page}
+                      onChange={(e) => setPage(e.target.value)}
+                      className="form-control"
+                    />
+                  </label>
+                </div>
+                <button
+                  onClick={fetchData}
+                  className="btn btn-primary me-2"
+                >
+                  Fetch Data
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-danger"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
           </div>
 
-          {loading && <p>Loading...</p>}
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {loading && <p className="loading">Loading...</p>}
+          {error && <p className="error">{error}</p>}
           {data && (
             <div className="crypto-list">
               {data.map((coin) => (
                 <div key={coin.id} className="crypto-item">
-                  <img src={coin.image} alt={coin.name} width={50} />
+                  <img src={coin.image} alt={coin.name} className="crypto-image" />
                   <div>
                     <h3>{coin.name} ({coin.symbol.toUpperCase()})</h3>
                     <p>Price: ${coin.current_price.toLocaleString()}</p>
@@ -110,9 +134,14 @@ function App() {
           ) : (
             <Register onRegister={handleRegister} />
           )}
-          <button onClick={() => setShowLogin(!showLogin)}>
-            {showLogin ? "Need to register?" : "Already have an account?"}
-          </button>
+          <div className="d-flex justify-content-center">
+            <button
+              onClick={() => setShowLogin(!showLogin)}
+              className="btn btn-success mt-4"
+            >
+              {showLogin ? "Need to register?" : "Already have an account?"}
+            </button>
+          </div>
         </>
       )}
     </div>
