@@ -43,6 +43,7 @@ function Login({ onLogin }) {
             <label className="form-label">Username:</label>
             <input
               type="text"
+              name="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="form-control"
@@ -53,6 +54,7 @@ function Login({ onLogin }) {
             <label className="form-label">Password:</label>
             <input
               type="password"
+              name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="form-control"
