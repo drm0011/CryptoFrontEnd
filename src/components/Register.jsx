@@ -10,8 +10,19 @@ function Register({ onRegister }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+
+    if (username.length < 3) {
+      setError("Username must be at least 3 characters.");
+      return;
+    }
+  
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+  
+    setLoading(true);
 
     try {
       const response = await fetch(`${API_URL}/register`, {

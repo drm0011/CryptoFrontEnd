@@ -3,6 +3,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Comments from "./components/Comments";
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -224,6 +226,7 @@ function App() {
               ))}
             </div>
           )}
+          {token && <Comments token={token} />}
         </>
       ) : (
         <>
