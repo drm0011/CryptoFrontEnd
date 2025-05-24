@@ -1,12 +1,16 @@
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function Login({ onLogin }) {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +20,7 @@ function Login({ onLogin }) {
       setError("Username must be at least 3 characters.");
       return;
     }
-  
+
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
@@ -27,16 +31,15 @@ function Login({ onLogin }) {
     try {
       const response = await fetch(`${API_URL}/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
       if (!response.ok) throw new Error("Login failed");
 
       const { token } = await response.json();
-      onLogin(token);
+      login(token);           
+      navigate("/portfolio"); 
     } catch (err) {
       setError(err.message);
     } finally {

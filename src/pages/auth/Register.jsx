@@ -1,12 +1,16 @@
 import { useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function Register({ onRegister }) {
+function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();           
+  const navigate = useNavigate();        
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,12 +20,12 @@ function Register({ onRegister }) {
       setError("Username must be at least 3 characters.");
       return;
     }
-  
+
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
     }
-  
+
     setLoading(true);
 
     try {
@@ -36,7 +40,8 @@ function Register({ onRegister }) {
       if (!response.ok) throw new Error("Registration failed");
 
       const { token } = await response.json();
-      onRegister(token);
+      login(token);               
+      navigate("/portfolio");     
     } catch (err) {
       setError(err.message);
     } finally {
