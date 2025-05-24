@@ -9,7 +9,7 @@ const Comments = ({ token }) => {
   useEffect(() => {
     const connect = new signalR.HubConnectionBuilder()
       .withUrl(`${import.meta.env.VITE_API_URL}/commentsHub`, {
-        accessTokenFactory: () => token, // optional: if you secure SignalR
+        accessTokenFactory: () => token, //optional when securing SignalR
       })
       .withAutomaticReconnect()
       .build();
@@ -34,7 +34,7 @@ const Comments = ({ token }) => {
   const sendComment = async () => {
     if (connection && newComment.trim()) {
       try {
-        await connection.invoke("SendComment", 0, newComment); // Replace 0 with actual userId if needed
+        await connection.invoke("SendComment", 0, newComment); //replace 0 with actual userId/username
         setNewComment("");
       } catch (err) {
         console.error("Error sending comment:", err);

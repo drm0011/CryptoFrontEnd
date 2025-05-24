@@ -1,0 +1,14 @@
+.navbar-logo-wrapper {
+    position: relative;
+    height: 64px; /* typical navbar height */
+    overflow: visible;
+  }
+  
+  .navbar-logo {
+    position: absolute;
+    top: -68px; /* negative to shift image upward */
+    left: 0;
+    max-height: 200px;
+    object-fit: contain;
+  }
+  

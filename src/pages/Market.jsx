@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getMarketData } from "../services/marketService";
-import { addToPortfolio } from "../services/portfolioService"; // ✅
+import { addToPortfolio } from "../services/portfolioService"; 
 
 const Market = () => {
   const { token } = useAuth();
@@ -27,7 +27,7 @@ const Market = () => {
 
   const handleAdd = async (coinId, coinName) => {
     try {
-      await addToPortfolio(coinId, coinName, token); // ✅
+      await addToPortfolio(coinId, coinName, token); 
       alert(`${coinName} added to your portfolio!`);
     } catch (err) {
       setError(err.message);
@@ -89,7 +89,6 @@ const Market = () => {
                   <p className="card-text">Price: ${coin.current_price.toLocaleString()}</p>
                   <p className="card-text">Market Cap: ${coin.market_cap.toLocaleString()}</p>
 
-                  {/* ✅ Add to Portfolio Button */}
                   {token ? (
                     <button
                       onClick={() => handleAdd(coin.id, coin.name)}
