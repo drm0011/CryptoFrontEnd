@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getPortfolio, removeCoin } from "../services/portfolioService";
+import Comments from "../components/Comments"; 
 
 const Portfolio = () => {
   const { token } = useAuth();
@@ -55,6 +56,11 @@ const Portfolio = () => {
       ) : (
         <p>Your portfolio is empty.</p>
       )}
+
+      
+      <div className="mt-5">
+        <Comments />
+      </div>
     </div>
   );
 };
