@@ -7,7 +7,6 @@ const Hero = () => {
     <section id="hero" className="hero-section">
       <div className="hero-container">
         
-        {/* Left Side: Text */}
         <div className="hero-text">
           <h1>Crypto insights without the noise.</h1>
           <p>
@@ -18,7 +17,6 @@ const Hero = () => {
           </Link>
         </div>
 
-        {/* Right Side: Image */}
         <div className="hero-image">
           <img src={phoneImage} alt="Crypto dashboard preview" />
         </div>
