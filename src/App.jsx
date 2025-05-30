@@ -6,6 +6,7 @@ import Market from "./pages/Market";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import MainLayout from "./layout/MainLayout";
+import CoinDetail from "./pages/CoinDetail"; 
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/market" element={<MainLayout><Market /></MainLayout>} />
         <Route path="/login" element={<MainLayout> <Login /> </MainLayout>} />
         <Route path="/register" element={<MainLayout> <Register /> </MainLayout> } />
+        <Route path="/coin/:id" element={<MainLayout><CoinDetail /></MainLayout>} />
       </Routes>
     </Router>
   );

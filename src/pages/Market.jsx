@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getMarketData } from "../services/marketService";
 import { addToPortfolio } from "../services/portfolioService"; 
+import { Link } from "react-router-dom";
 
 const Market = () => {
   const { token } = useAuth();
@@ -84,7 +85,9 @@ const Market = () => {
                 <div className="card-body">
                   <img src={coin.image} alt={coin.name} width={30} className="mb-2" />
                   <h5 className="card-title">
+                    <Link to={`/coin/${coin.id}`} className="text-decoration-none">
                     {coin.name} ({coin.symbol.toUpperCase()})
+                    </Link>
                   </h5>
                   <p className="card-text">Price: ${coin.current_price.toLocaleString()}</p>
                   <p className="card-text">Market Cap: ${coin.market_cap.toLocaleString()}</p>
