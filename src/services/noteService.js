@@ -8,14 +8,14 @@ export const fetchNotes = async (token) => {
   return res.json();
 };
 
-export const saveNote = async (coinId, note, token) => {
+export const saveNote = async (coinId, note, mood, token) => {
   const res = await fetch(`${API_URL}/note`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ coinId, note }),
+    body: JSON.stringify({ coinId, note, mood }),
   });
   if (!res.ok) throw new Error("Failed to save note");
 };
