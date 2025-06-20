@@ -1,28 +1,27 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
 
     if (username.length < 3) {
-      setError("Username must be at least 3 characters.");
+      toast.error("Username must be at least 3 characters.");
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+      toast.error("Password must be at least 6 characters.");
       return;
     }
 
@@ -38,10 +37,11 @@ function Login() {
       if (!response.ok) throw new Error("Login failed");
 
       const { token } = await response.json();
-      login(token);           
-      navigate("/portfolio"); 
+      login(token);
+      toast.success("Logged in successfully!");
+      navigate("/portfolio");
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message || "Login failed.");
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,6 @@ function Login() {
     <div className="card mx-auto mt-5" style={{ maxWidth: "400px" }}>
       <div className="card-body">
         <h2 className="card-title text-center">Login</h2>
-        {error && <p className="text-danger text-center">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Username:</label>
@@ -61,7 +60,6 @@ function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="form-control"
-              required
             />
           </div>
           <div className="mb-3">
@@ -72,7 +70,6 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="form-control"
-              required
             />
           </div>
           <button

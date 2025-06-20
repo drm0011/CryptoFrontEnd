@@ -31,3 +31,18 @@ export const addToPortfolio = async (coinId, coinName, token) => {
     if (!res.ok) throw new Error("Failed to add to portfolio");
   };
   
+  export const fetchSentiment = async (token) => {
+    const res = await fetch(`${API_URL}/sentiment`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Failed to fetch sentiment");
+    return res.json();
+};
+
+export const fetchVolatility = async (token, days) => {
+  const res = await fetch(`${API_URL}/volatility?days=${days}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch volatility");
+  return res.json();
+};

@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { getMarketData } from "../services/marketService";
 import { addToPortfolio } from "../services/portfolioService"; 
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const Market = () => {
   const { token } = useAuth();
@@ -15,12 +16,11 @@ const Market = () => {
 
   const fetchMarket = async () => {
     setLoading(true);
-    setError(null);
     try {
       const data = await getMarketData(token, vsCurrency, perPage, page);
       setMarketData(data);
     } catch (err) {
-      setError(err.message);
+      toast.error("Failed to fetch market data.");
     } finally {
       setLoading(false);
     }
@@ -29,9 +29,9 @@ const Market = () => {
   const handleAdd = async (coinId, coinName) => {
     try {
       await addToPortfolio(coinId, coinName, token); 
-      alert(`${coinName} added to your portfolio!`);
+      toast.success(`${coinName} added to your portfolio!`);
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message || "Failed to add coin.");
     }
   };
 
@@ -85,7 +85,6 @@ const Market = () => {
       </div>
 
       {loading && <p>Loading market data...</p>}
-      {error && <p className="text-danger">{error}</p>}
 
       {marketData && (
         <div className="row">

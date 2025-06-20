@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { fetchCoinInfo, fetchCoinChart } from "../services/marketService";
 import { useParams, useSearchParams } from "react-router-dom";
 import { addToPortfolio } from "../services/portfolioService";
+import { toast } from 'react-toastify';
 import {
   LineChart,
   Line,
@@ -39,7 +40,7 @@ const CoinDetail = () => {
         setChartData(formattedChart);
       } catch (err) {
         console.error(err);
-        setError("Failed to load coin data");
+        toast.error("Failed to load coin data.");
       }
     };
 
@@ -57,10 +58,9 @@ const CoinDetail = () => {
     try {
       await addToPortfolio(coin.id, coin.name, token);
       setAdded(true);
-      setError(null);
+      toast.success("Added to portfolio!");
     } catch (err) {
-      console.error("Failed to add coin to portfolio:", err);
-      setError("Something went wrong. Please try again.");
+      toast.error("Failed to add coin to your portfolio.");
     }
   };
 
@@ -108,14 +108,13 @@ const CoinDetail = () => {
         <p className="text-danger">{error}</p>
       )}
 
-      {/* Add to Portfolio Button */}
       <div className="mt-3">
         <button
           className="btn btn-sm btn-primary"
           onClick={handleAddToPortfolio}
           disabled={added}
         >
-          {added ? "✓ Added to Portfolio" : "Add to Portfolio"}
+          {added ? "Added to Portfolio" : "Add to Portfolio"}
         </button>
       </div>
 

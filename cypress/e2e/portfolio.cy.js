@@ -26,35 +26,48 @@ describe('Updated Portfolio Tests', () => {
 
   it('Edits note and mood, and saves', () => {
     cy.visit('/portfolio');
-    cy.get('h4').should('exist');
 
-    cy.get('.note-display').first().click();
-    cy.get('input.form-control').clear().type('Updated note');
-    cy.get('select').select('bearish');
-    cy.get('button').contains('Save').click();
-
-    cy.get('.note-display').first().should('contain', 'Updated note');
-    cy.get('.note-display').first().should('contain', '🐻');
-  });
-
-  it('Persists note and mood after reload', () => {
-    cy.visit('/portfolio');
-    cy.get('.note-display').first().click();
-    cy.get('input.form-control').clear().type('Persistence Test');
-    cy.get('select').select('bullish');
-    cy.get('button').contains('Save').click();
-    cy.reload();
-
-    cy.get('.note-display').first().should(($el) => {
-      expect($el.text()).to.include('Persistence Test');
-      expect($el.text()).to.include('🐂');
+    cy.get('.portfolio-item').first().within(() => {
+      cy.get('.note-display').click();                        
+      cy.get('[data-cy="note-input"]').clear().type('Updated note');
+      cy.get('[data-cy="mood-select"]').select('bearish');         
+      cy.contains('Save').click();                                  
+      cy.get('.note-display').should('contain', 'Updated note');
+      cy.get('.note-display').should('contain', '🐻');
     });
   });
 
+
+  it('Persists note and mood after reload', () => {
+  cy.visit('/portfolio');
+
+  cy.get('.portfolio-item').first().within(() => {
+    cy.get('.note-display').click();
+    cy.get('[data-cy="note-input"]').clear().type('Persistence Test');
+    cy.get('[data-cy="mood-select"]').select('bullish');
+    cy.contains('Save').click();
+  });
+
+  cy.reload();
+
+  cy.get('.portfolio-item').first().within(() => {
+    cy.get('.note-display').should('contain', 'Persistence Test');
+    cy.get('.note-display').should('contain', '🐂');
+  });
+});
+
   it('Removes a coin from portfolio', () => {
     cy.visit('/portfolio');
-    cy.get('button.btn-danger').first().click();
-    cy.get('h4').should('not.exist');
+
+    cy.get('.portfolio-item').then(($itemsBefore) => {
+      const beforeCount = $itemsBefore.length;
+
+      cy.get('.portfolio-item').first().within(() => {
+        cy.get('button.btn-danger').click();
+      });
+
+      cy.get('.portfolio-item', { timeout: 4000 }).should('have.length', beforeCount - 1);
+    });
   });
 
   it('Shows empty state when portfolio is cleared', () => {
@@ -78,38 +91,72 @@ describe('Updated Portfolio Tests', () => {
     cy.get('.card').first().should('contain', '€');
   });
 
-  it('Prevents duplicate coin addition (alert shown)', () => {
+  it('Prevents duplicate coin addition (toast shown)', () => {
     cy.visit('/market');
     cy.contains('Fetch Market Data').click();
+    cy.contains('Loading market data...').should('not.exist');
+
+    //first add
     cy.get('.card').first().within(() => {
       cy.contains('Add to Portfolio').click();
     });
 
-    cy.on('window:alert', (txt) => {
-      expect(txt).to.include('added to your portfolio');
-    });
+    cy.get('.Toastify__toast')
+      .should('contain', 'added to your portfolio!');
 
+    //duplicate add
     cy.get('.card').first().within(() => {
       cy.contains('Add to Portfolio').click();
     });
+
+    cy.get('.Toastify__toast')
+      .should('contain', 'Failed to add to portfolio');
+  });
+
+  it('Prevents duplicate coin addition via coindetail page (toast shown)', () => {
+    cy.visit('/market');
+    cy.contains('Fetch Market Data').click();
+    cy.contains('Loading market data...').should('not.exist');
+
+    cy.get('.card').first().within(() => {
+      cy.get('a').first().click();
+    });
+
+    //duplicate add
+    cy.contains('Add to Portfolio').click();
+    cy.get('.Toastify__toast--error')
+      .should('contain', 'Failed to add coin to your portfolio');
   });
 
   it('Cancels editing a note and mood without saving', () => {
-    cy.visit('/portfolio');
-    cy.get('.note-display').first().invoke('text').then((originalText) => {
-      cy.get('.note-display').first().click();
-      cy.get('input.form-control').clear().type('Temporary change');
-      cy.get('select').select('bearish');
-  
-      // Click outside to cancel (simulate blur/cancel by reload)
-      cy.reload();
-  
-      cy.get('.note-display').first().invoke('text').should((currentText) => {
-        expect(currentText).to.eq(originalText); // it should not have changed
-      });
-    });
+  cy.visit('/portfolio');
+
+  const initialNote = 'Initial note test';
+
+  cy.get('.portfolio-item').first().within(() => {
+    cy.get('.note-display').click();
+    cy.get('[data-cy="note-input"]').clear().type(initialNote);
+    cy.get('[data-cy="mood-select"]').select('neutral');
+    cy.contains('Save').click();
+    cy.get('.note-display').should('contain', initialNote);
+    cy.get('.note-display').should('contain', '😐');
   });
-  
+
+  //edit but dont save
+  cy.get('.portfolio-item').first().within(() => {
+    cy.get('.note-display').click();
+    cy.get('[data-cy="note-input"]').clear().type('Temporary change');
+    cy.get('[data-cy="mood-select"]').select('bearish');
+  });
+
+  cy.reload();
+  cy.contains('Your Portfolio').should('be.visible');
+
+  cy.get('.portfolio-item').first().within(() => {
+    cy.get('.note-display').should('contain', initialNote);
+    cy.get('.note-display').should('contain', '😐'); 
+  });
+});
 
   it('Applies flash effect after editing note', () => {
     cy.visit('/portfolio');

@@ -7,10 +7,13 @@ import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import MainLayout from "./layout/MainLayout";
 import CoinDetail from "./pages/CoinDetail"; 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <Router>
+        <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         <Route path="/" element={<MainLayout><Home /></MainLayout>} />
         <Route path="/portfolio" element={<MainLayout><Portfolio /></MainLayout>} />
