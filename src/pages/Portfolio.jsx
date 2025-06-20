@@ -13,6 +13,8 @@ const Portfolio = () => {
   const [portfolio, setPortfolio] = useState(null);
   const [error, setError] = useState(null);
   const [notes, setNotes] = useState({});
+  const [editingCoinId, setEditingCoinId] = useState(null);
+  const [highlightedCoinId, setHighlightedCoinId] = useState(null);
 
   const loadPortfolio = async () => {
     try {
@@ -43,11 +45,7 @@ const Portfolio = () => {
     try {
       setNotes((prev) => ({ ...prev, [coinId]: newNote }));
       await saveNote(coinId, newNote, token);
-
-      const userId = parseJwt(token)?.sub || parseJwt(token)?.nameid;
-      if (userId) {
-        sendNoteSignal(userId, coinId, newNote);
-      }
+        sendNoteSignal(coinId, newNote);
     } catch (err) {
       console.error("Failed to save note", err);
     }
@@ -60,17 +58,19 @@ const Portfolio = () => {
     initSignalR(token).then(() => {
       onNoteReceived(({ coinId, note }) => {
         setNotes((prev) => ({ ...prev, [coinId]: note }));
+        setHighlightedCoinId(coinId);
+        setTimeout(() => setHighlightedCoinId(null), 1000);
       });
     });
   }, [token]);
 
-  const parseJwt = (token) => {
+  /* const parseJwt = (token) => {
     try {
       return JSON.parse(atob(token.split(".")[1]));
     } catch {
       return {};
     }
-  };
+  }; */
 
   if (!token)
     return <p className="text-center mt-4">Please log in to view your portfolio.</p>;
@@ -84,13 +84,28 @@ const Portfolio = () => {
           {portfolio.portfolioItems.map((item) => (
             <div key={item.coinId} className="portfolio-item mb-3 p-3 border rounded">
               <h4>{item.coinName}</h4>
-              <p>Amount: {item.amount}</p>
-              <textarea
-                className="form-control mb-2"
-                placeholder="Write notes for this coin..."
-                value={notes[item.coinId] || ""}
-                onChange={(e) => handleNoteChange(item.coinId, e.target.value)}
-              />
+                {editingCoinId === item.coinId ? (
+                <input
+                  className="form-control"
+                  value={notes[item.coinId] || ""}
+                  onChange={(e) =>
+                    setNotes((prev) => ({ ...prev, [item.coinId]: e.target.value }))
+                  }
+                  onBlur={() => {
+                    handleNoteChange(item.coinId, notes[item.coinId]);
+                    setEditingCoinId(null);
+                  }}
+                  autoFocus
+                />
+              ) : (
+                <div
+                  className={`note-display ${highlightedCoinId === item.coinId ? "note-flash" : ""}`}
+                  onClick={() => setEditingCoinId(item.coinId)}
+                  style={{ cursor: "pointer", minHeight: "1.5em", padding: "4px" }}
+                >
+                  {notes[item.coinId] || <i className="text-muted">Click to add a note</i>}
+                </div>
+              )}
               <button
                 className="btn btn-sm btn-danger"
                 onClick={() => handleRemove(item.coinId)}

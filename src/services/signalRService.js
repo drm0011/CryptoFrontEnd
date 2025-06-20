@@ -27,9 +27,9 @@ export const initSignalR = (token) => {
     noteCallback = callback;
   };
   
-  export const sendNoteSignal = async (userId, coinId, note) => {
+  export const sendNoteSignal = async (coinId, note) => {
     if (connection && connection.state === "Connected") {
-      await connection.invoke("SendComment", userId, coinId, note);
+      await connection.invoke("SendComment", coinId, note);
     }
   };
   
