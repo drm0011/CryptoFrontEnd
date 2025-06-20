@@ -95,7 +95,7 @@ const Market = () => {
                 <div className="card-body">
                   <img src={coin.image} alt={coin.name} width={30} className="mb-2" />
                   <h5 className="card-title">
-                    <Link to={`/coin/${coin.id}`} className="text-decoration-none">
+                    <Link to={`/coin/${coin.id}?currency=${vsCurrency}`} className="text-decoration-none">
                     {coin.name} ({coin.symbol.toUpperCase()})
                     </Link>
                   </h5>

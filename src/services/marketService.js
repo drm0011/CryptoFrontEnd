@@ -11,8 +11,8 @@ export const getMarketData = async (token, vsCurrency, perPage, page) => {
   return res.json();
 };
 
-export const fetchCoinInfo = async (id, token) => {
-  const res = await fetch(`${API_URL}/coininfo?id=${id}`, {
+export const fetchCoinInfo = async (id, token, vsCurrency) => {
+  const res = await fetch(`${API_URL}/coininfo?id=${id}&vsCurrency=${vsCurrency}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -21,8 +21,8 @@ export const fetchCoinInfo = async (id, token) => {
   return res.json();
 };
 
-export const fetchCoinChart = async (id, token) => {
-  const res = await fetch(`${API_URL}/coincandles?id=${id}&vsCurrency=usd&days=7`, {
+export const fetchCoinChart = async (id, token, vsCurrency) => {
+  const res = await fetch(`${API_URL}/coincandles?id=${id}&vsCurrency=${vsCurrency}&days=7`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
