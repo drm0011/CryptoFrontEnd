@@ -1,6 +1,5 @@
-// cypress.config.mjs
 import { defineConfig } from "cypress";
-import * as dotenv from "dotenv"; // Import dotenv
+import * as dotenv from "dotenv"; 
 dotenv.config(); // Load .env
 
 export default defineConfig({
