@@ -41,13 +41,23 @@ const Market = () => {
 
       <div className="row mb-3">
         <div className="col-md-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Currency (e.g. usd)"
-            value={vsCurrency}
-            onChange={(e) => setVsCurrency(e.target.value)}
-          />
+            <select
+      className="form-control"
+      value={vsCurrency}
+      onChange={(e) => setVsCurrency(e.target.value)}
+    >
+      <option value="usd">USD</option>
+      <option value="eur">EUR</option>
+      <option value="gbp">GBP</option>
+      <option value="jpy">JPY</option>
+      <option value="cad">CAD</option>
+      <option value="aud">AUD</option>
+      <option value="chf">CHF</option>
+      <option value="inr">INR</option>
+      <option value="cny">CNY</option>
+      <option value="btc">BTC</option>
+      <option value="eth">ETH</option>
+    </select>
         </div>
         <div className="col-md-3">
           <input
@@ -89,8 +99,20 @@ const Market = () => {
                     {coin.name} ({coin.symbol.toUpperCase()})
                     </Link>
                   </h5>
-                  <p className="card-text">Price: ${coin.current_price.toLocaleString()}</p>
-                  <p className="card-text">Market Cap: ${coin.market_cap.toLocaleString()}</p>
+                  <p className="card-text">
+                    Price:{" "}
+                    {coin.current_price.toLocaleString(undefined, {
+                      style: "currency",
+                      currency: vsCurrency.toUpperCase(),
+                    })}
+                  </p>
+                  <p className="card-text">
+                    Market Cap:{" "}
+                    {coin.market_cap.toLocaleString(undefined, {
+                      style: "currency",
+                      currency: vsCurrency.toUpperCase(),
+                    })}
+                  </p>
 
                   {token ? (
                     <button

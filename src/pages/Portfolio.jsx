@@ -58,11 +58,11 @@ const Portfolio = () => {
     initSignalR(token).then(() => {
       onNoteReceived(({ coinId, note }) => {
         setNotes((prev) => ({ ...prev, [coinId]: note }));
-        setHighlightedCoinId(null); // Reset first
-setTimeout(() => {
-  setHighlightedCoinId(coinId);
-  setTimeout(() => setHighlightedCoinId(null), 1000); // Cleanup
-}, 10); // Slight delay to ensure reflow
+        setHighlightedCoinId(null); 
+        setTimeout(() => {
+          setHighlightedCoinId(coinId);
+          setTimeout(() => setHighlightedCoinId(null), 1000); 
+        }, 10); 
       });
     });
   }, [token]);
