@@ -47,7 +47,7 @@ const CoinDetail = () => {
     loadData();
   }, [id, token]);
 
-  // Optional: reset error and added state when switching coins
+  //reset error and added state when switching coins
   useEffect(() => {
     setError(null);
     setAdded(false);
