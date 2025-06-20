@@ -58,19 +58,14 @@ const Portfolio = () => {
     initSignalR(token).then(() => {
       onNoteReceived(({ coinId, note }) => {
         setNotes((prev) => ({ ...prev, [coinId]: note }));
-        setHighlightedCoinId(coinId);
-        setTimeout(() => setHighlightedCoinId(null), 1000);
+        setHighlightedCoinId(null); // Reset first
+setTimeout(() => {
+  setHighlightedCoinId(coinId);
+  setTimeout(() => setHighlightedCoinId(null), 1000); // Cleanup
+}, 10); // Slight delay to ensure reflow
       });
     });
   }, [token]);
-
-  /* const parseJwt = (token) => {
-    try {
-      return JSON.parse(atob(token.split(".")[1]));
-    } catch {
-      return {};
-    }
-  }; */
 
   if (!token)
     return <p className="text-center mt-4">Please log in to view your portfolio.</p>;

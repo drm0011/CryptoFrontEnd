@@ -66,9 +66,25 @@ button:hover {
 }
 
 @keyframes flash {
-  0% { background-color: #fff3cd; }
-  50% { background-color: #ffeeba; }
-  100% { background-color: transparent; }
+  0% {
+    background-color: #d1f7d6; /* soft green */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    background-color: #b0f0bc;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.note-display {
+  transition: background-color 0.3s ease;
+  border-radius: 6px;
+  padding: 6px 10px;
+  min-height: 1.5em;
 }
 
 .note-flash {
